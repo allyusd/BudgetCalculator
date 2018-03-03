@@ -75,20 +75,20 @@ namespace TennisScore
             TotalAmountShouldBe(new DateTime(2018, 6, 5), new DateTime(2018, 8, 5), 8360);
         }
 
-        //[TestMethod]
-        //public void Test0605To0905()
-        //{
-        //    var list = new List<Budget>
-        //    {
-        //        new Budget() { YearMonth = "201809", Amount = 0 },
-        //        new Budget() { YearMonth = "201810", Amount = 3100 },
-        //        new Budget() { YearMonth = "201811", Amount = 30 },
-        //        new Budget() { YearMonth = "201812", Amount = 0 }
-        //    };
-        //    _repo.GetAll().Returns(list);
+        [TestMethod]
+        public void Test0605To0905()
+        {
+            var list = new List<Budget>
+            {
+                new Budget() { YearMonth = "201809", Amount = 0 },
+                new Budget() { YearMonth = "201810", Amount = 3100 },
+                new Budget() { YearMonth = "201811", Amount = 30 },
+                new Budget() { YearMonth = "201812", Amount = 0 }
+            };
+            _repo.GetAll().Returns(list);
 
-        //    TotalAmountShouldBe(new DateTime(2018, 9, 10), new DateTime(2018, 12, 10), 3130);
-        //}
+            TotalAmountShouldBe(new DateTime(2018, 9, 10), new DateTime(2018, 12, 10), 3130);
+        }
 
         private void TotalAmountShouldBe(DateTime startDate, DateTime endDate, int expected)
         {

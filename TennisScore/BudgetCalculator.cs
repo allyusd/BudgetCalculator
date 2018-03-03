@@ -21,11 +21,11 @@ namespace TennisScore
             }
 
             var budgets = this._repo.GetAll();
-            
+
             if (budgets.Count > 0)
             {
                 var startTimeString = FormateDateTimeString(start);
-                
+
                 if (!HasData(budgets, startTimeString))
                 {
                     return 0;
@@ -33,15 +33,15 @@ namespace TennisScore
 
                 if (IsSameMonth(start, end))
                 {
-                    var budget = GetBudget(budgets, startTimeString);
+                    var budget = GetBudget(budgets, start);
                     return CalOneMonthAmount(start, end, budget);
                 }
                 else
                 {
-                    
+
                     var startBudget = GetBudget(budgets, startTimeString);
 
-                    var endBudget = GetBudget(end, budgets);
+                    var endBudget = GetBudget(budgets, end);
 
                     int tTotleAmount = CalOneMonthAmount(start, GetMonthLastDate(start), startBudget)
                                  + CalOneMonthAmount(GetMonthFirstDate(end), end, endBudget);
@@ -52,17 +52,33 @@ namespace TennisScore
                     }
                     else
                     {
-                        var tBudget = GetBudget(start.AddMonths(1), budgets);
-                        return tTotleAmount + tBudget.Amount;
+                        var tBudget = GetAmountRemoveFirstAndLastMonth(budgets, start, end);
+                        //var tBudget = GetBudget(budgets, start.AddMonths(1));
+
+                        return tTotleAmount + tBudget;
                     }
-                    
+
                 }
             }
 
             return 0;
         }
 
-        private static Budget GetBudget(DateTime end, List<Budget> budgets)
+        private int GetAmountRemoveFirstAndLastMonth(List<Budget> budgets, DateTime start, DateTime end)
+        {
+            var firstMonth = FormateDateTimeString(start);
+            var lastMonth = FormateDateTimeString(end);
+
+            //double sum = Table.Select(t => t.Amount ?? 0).Sum();
+
+            var totalMonthBudget = budgets.Select(t => t.Amount).Sum();
+            var firstMonthBudget = budgets.First();
+            var lastMonthBudget = budgets.Last();
+
+            return totalMonthBudget - (firstMonthBudget.Amount + lastMonthBudget.Amount);
+        }
+
+        private static Budget GetBudget(List<Budget> budgets, DateTime end)
         {
             var endTimeString = FormateDateTimeString(end);
             var endBudget = GetBudget(budgets, endTimeString);
